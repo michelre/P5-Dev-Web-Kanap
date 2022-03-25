@@ -1,4 +1,7 @@
-/** Importer les produits sur la page Index */
+// Script page index.html
+
+/* Importer les produits sur la page index.html */
+
 fetch("http://localhost:3000/api/products")
     .then( data => data.json())
     .then( jsonListProducts => {
