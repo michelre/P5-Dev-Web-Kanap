@@ -7,7 +7,7 @@ const url = new URL(window.location.href);
 const params = new URLSearchParams(url.search);
 const productId = params.get('id');
 
-/*Insérer un produit et ses détails sur la page product*/
+/*Insérer un produit et ses détails sur la page HTML product*/
 
 fetch(`http://localhost:3000/api/products/${productId}`)
     .then(function(res) {
@@ -27,13 +27,16 @@ function loadProductDOM(product){
     document.querySelector("#title").innerHTML += product.name
     document.querySelector("#price").innerHTML += product.price
     document.querySelector("#colors").innerHTML += 
-        `<option value="">${product.colors}</option>
-         <option value="">${product.colors}</option>
-         <option value="">${product.colors}</option>
-         <option value="">${product.colors}</option>`
-
-   
+        `<option value="${product.colors[0]}">${product.colors[0]}</option>
+        <option value="${product.colors[1]}">${product.colors[1]}</option>
+        <option value="${product.colors[2]}">${product.colors[2]}</option>
+        <option value="${product.colors[3]}">${product.colors[3]}</option>`
 }
+
+
+
+
+
 
 /*Ajouter le produit au panier quand on clique sur le bouton*/
 

@@ -8,6 +8,5 @@ class Product{
         this.imageUrl = jsonProducts.imageUrl;
         this.description = jsonProducts.description;
         this.altTxt = jsonProducts.altTxt;
-        //this.color1 = jsonProducts.colors[0];
     }
 }
