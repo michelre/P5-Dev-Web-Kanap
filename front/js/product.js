@@ -34,8 +34,12 @@ function loadProductDOM(product){
 
 /*Ajouter le produit au panier quand on clique sur le bouton*/
 
-/*document.querySelector("#addToCart").forEach(product => {
-    product.addEventListener("click",function(){
-        addToCart(this.id)
-    })
-})*/
+let addToCartButton = document.querySelector("#addToCart")
+for (let i = 0; i < addToCartButton.length; i++){
+    let button = addToCartButton[i]
+    button.addEventListener("click", addToCartClicked())
+}
+
+function addToCartClicked(event) {
+    let button = event.target
+}
