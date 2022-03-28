@@ -26,17 +26,11 @@ function loadProductDOM(product){
         </div>`
     document.querySelector("#title").innerHTML += product.name
     document.querySelector("#price").innerHTML += product.price
-    document.querySelector("#colors").innerHTML += 
-        `<option value="${product.colors[0]}">${product.colors[0]}</option>
-        <option value="${product.colors[1]}">${product.colors[1]}</option>
-        <option value="${product.colors[2]}">${product.colors[2]}</option>
-        <option value="${product.colors[3]}">${product.colors[3]}</option>`
+    for(let colors of product.colors){
+        document.querySelector("#colors").innerHTML += 
+        `<option value="${colors}">${colors}</option>`
+    }
 }
-
-
-
-
-
 
 /*Ajouter le produit au panier quand on clique sur le bouton*/
 
