@@ -34,12 +34,21 @@ function loadProductDOM(product){
 
 /*Ajouter le produit au panier quand on clique sur le bouton*/
 
-let addToCartButton = document.querySelector("#addToCart")
-for (let i = 0; i < addToCartButton.length; i++){
-    let button = addToCartButton[i]
-    button.addEventListener("click", addToCartClicked())
+// Créer un evenement sur le bouton ajouter au panier
+const button = document.querySelector("#addToCart");
+button.addEventListener("click", addToLocalStorage());
+   
+
+//Créer une fonction callback pr envoyer array au local storage et aller sur la page panier
+function addToLocalStorage(){
+    let productJson = {
+        id : productId,
+        quantity : document.querySelector("#quantity").reportValidity(),
+        color: document.querySelector("#colors").reportValidity(),
+    };
+    let productStorage = JSON.stringify(productJson);
+    localStorage.setItem("obj", productStorage);
 }
 
-function addToCartClicked(event) {
-    let button = event.target
-}
+
+
