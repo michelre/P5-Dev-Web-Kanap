@@ -62,5 +62,5 @@ if (removeCartItemButton) {
 function deleteCartItem() {
   const cartItems = document.querySelector("#cart__items");
   cartItems.delete();
-  console.log(deleteCartItem);
+  console.log(deleteCartItem); //ne marche pas
 }

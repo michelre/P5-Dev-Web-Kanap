@@ -40,15 +40,15 @@ const button = document.querySelector("#addToCart");
 button.addEventListener("click", addToLocalStorage());
 
 //Créer une fonction callback pr envoyer array au local storage 
-function addToLocalStorage(){
+function addToLocalStorage(){ //un seul produit ds le panier
     const quantityInput = document.querySelector("#quantity");
     if(quantityInput) {document.querySelector("#quantity").color;}
     const colorInput = document.querySelector("#color");
     if(colorInput) {document.querySelector("#color").color;}
     let productJson = {
         id : productId,
-        quantity : quantityInput,
-        color: colorInput, 
+        quantity : quantityInput, //ne marche pas
+        color: colorInput,  //ne marche pas
     };
     let productStorage = JSON.stringify(productJson);
     localStorage.setItem("obj", productStorage);
@@ -57,7 +57,9 @@ function addToLocalStorage(){
     console.log(productJson);
 };
 
-// Créer un message erreur si quantité=0 et si couleur non selectionnée
+// Créer un message erreur si quantité=0 et sup à 100
+
+//Créer un message erreur si couleur non selectionnée
 
 // Créer un message d'alerte pr confimer que le produit a été ajouté au panier
 
