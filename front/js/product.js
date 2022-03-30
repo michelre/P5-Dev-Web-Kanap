@@ -9,6 +9,7 @@ const productId = params.get('id');
 
 /*Insérer un produit et ses détails sur la page HTML product*/
 
+//Récuperer les données du produit sur le localhost grace à l'id
 fetch(`http://localhost:3000/api/products/${productId}`)
     .then(function(res) {
         return res.json();
@@ -17,7 +18,7 @@ fetch(`http://localhost:3000/api/products/${productId}`)
         const product = new Product(res)
         loadProductDOM(product)
     })
-
+//Remplir le HTML avec les données récupérées
 function loadProductDOM(product){
     document.querySelector('.item__content__description').innerHTML += product.description
     document.querySelector(".item__img").innerHTML += 
@@ -37,18 +38,29 @@ function loadProductDOM(product){
 // Créer un evenement sur le bouton ajouter au panier
 const button = document.querySelector("#addToCart");
 button.addEventListener("click", addToLocalStorage());
-   
 
-//Créer une fonction callback pr envoyer array au local storage et aller sur la page panier
+//Créer une fonction callback pr envoyer array au local storage 
 function addToLocalStorage(){
+    const quantityInput = document.querySelector("#quantity");
+    if(quantityInput) {document.querySelector("#quantity").color;}
+    const colorInput = document.querySelector("#color");
+    if(colorInput) {document.querySelector("#color").color;}
     let productJson = {
         id : productId,
-        quantity : document.querySelector("#quantity").reportValidity(),
-        color: document.querySelector("#colors").reportValidity(),
+        quantity : quantityInput,
+        color: colorInput, 
     };
     let productStorage = JSON.stringify(productJson);
     localStorage.setItem("obj", productStorage);
-}
+    console.log(quantityInput);
+    console.log(colorInput);
+    console.log(productJson);
+};
+
+// Créer un message erreur si quantité=0 et si couleur non selectionnée
+
+// Créer un message d'alerte pr confimer que le produit a été ajouté au panier
+
 
 
 
