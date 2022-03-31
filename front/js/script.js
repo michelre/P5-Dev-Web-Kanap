@@ -1,10 +1,13 @@
-/** Importer les produits sur la page Index */
+// Script page index.html
+
+/* Importer les produits sur la page index.html */
+
 fetch("http://localhost:3000/api/products")
-    .then(data => data.json())
-    .then(jsonListProducts => {
-        for (let jsonProducts of jsonListProducts) {
+    .then( data => data.json())
+    .then( jsonListProducts => {
+        for(let jsonProducts of jsonListProducts){
             let product = new Product(jsonProducts);
-            document.querySelector(".items").innerHTML +=
+            document.querySelector(".items").innerHTML += 
                 `<a href="./product.html?id=${product.id}">
                     <article>
                         <img src="${product.imageUrl}" alt="${product.altTxt}">
@@ -13,5 +16,4 @@ fetch("http://localhost:3000/api/products")
                     </article>
                 </a>`
         }
-
     })
