@@ -52,15 +52,13 @@ function loadCartDOM(product){
                 </div>
               </article>`;
     }
-/* Activer le boutton Supprimer*/
+/* Activer le boutton Supprimer*///ne marche pas
 
 const removeCartItemButton = document.querySelector(".deleteItem");
 if (removeCartItemButton) {
   removeCartItemButton.addEventListener("click" , deleteCartItem());
-}
-
 function deleteCartItem() {
   const cartItems = document.querySelector("#cart__items");
   cartItems.delete();
-  console.log(deleteCartItem); //ne marche pas
+}
 }

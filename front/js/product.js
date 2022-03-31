@@ -40,29 +40,35 @@ const button = document.querySelector("#addToCart");
 button.addEventListener("click", addToLocalStorage());
 
 //Créer une fonction callback pr envoyer array au local storage 
-function addToLocalStorage(){ //un seul produit ds le panier
-    const quantityInput = document.querySelector("#quantity");
-    if(quantityInput) {document.querySelector("#quantity").color;}
-    const colorInput = document.querySelector("#color");
-    if(colorInput) {document.querySelector("#color").color;}
-    let productJson = {
+function addToLocalStorage(){ 
+    // créer array du produit avec son ID, qte et couleur
+    const quantityInput = document.querySelector("#quantity"); // Créer un message erreur si quantité=0 et sup à 100
+    if(quantityInput) {document.querySelector("#quantity").value;}
+    //if(quantityInput < 1 && quantityInput >100) {alert("Merci d'entrer une quantité comprise entre 1 et 100")};
+    const colorInput = document.querySelector("#color"); //Créer un message erreur si couleur non selectionnée
+    if(colorInput) {document.querySelector("#color").value;}
+    const productJson = {
         id : productId,
         quantity : quantityInput, //ne marche pas
         color: colorInput,  //ne marche pas
     };
+    //Convertir en Json pour garder l'array dans le localstorage
     let productStorage = JSON.stringify(productJson);
     localStorage.setItem("obj", productStorage);
+    //Pouvoir ajouter plusieurs produits dans le localstorage **ne marche pas**
+    let existingEntries = JSON.parse(localStorage.getItem("allEntries"));
+        if(existingEntries == null) existingEntries = [];
+    existingEntries.push(productJson);
+    localStorage.setItem("allEntries", JSON.stringify(existingEntries)); 
+    // Créer un message d'alerte pr confimer que le produit a été ajouté au panier
+    //alert("Votre produit a bien été ajouté au panier");       
+
+    //Vérifier que le produit n'est pas déjà ds le local storage avt de l'ajouter, si m prod m couleur; seulement chger la qté
+    
     console.log(quantityInput);
     console.log(colorInput);
     console.log(productJson);
+    console.log(localStorage.length);
 };
-
-// Créer un message erreur si quantité=0 et sup à 100
-
-//Créer un message erreur si couleur non selectionnée
-
-// Créer un message d'alerte pr confimer que le produit a été ajouté au panier
-
-
 
 
