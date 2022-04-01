@@ -6,6 +6,7 @@ cliqué sur la page d’accueil.*/
 const url = new URL(window.location.href);
 const params = new URLSearchParams(url.search);
 const productId = params.get('id');
+let product = null;
 
 /*Insérer un produit et ses détails sur la page HTML product*/
 
@@ -15,7 +16,7 @@ fetch(`http://localhost:3000/api/products/${productId}`)
         return res.json();
     })
     .then(res => {
-        const product = new Product(res)
+        product = new Product(res)
         loadProductDOM(product)
     })
 //Remplir le HTML avec les données récupérées
