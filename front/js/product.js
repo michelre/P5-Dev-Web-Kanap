@@ -46,16 +46,21 @@ function addToLocalStorage() {
     let quantityInput = document.querySelector("#quantity"); 
     if(quantityInput) {
         quantityInput = parseInt(quantityInput.value);
-    }
+    };
     // Créer un message erreur si quantité=0 et sup à 100?
+    if(quantityInput < 1 || quantityInput > 100){ 
+        alert("Veuillez entrer une quantité comprise entre 1 et 100");
+        return
+    };
     //Couleur
     let colorInput = document.querySelector("#colors"); 
-    if(colorInput.value === '') { //Créer un message erreur si couleur non selectionnée
+    //Créer un message erreur si couleur non selectionnée
+    if(colorInput.value === '') { 
         alert("Veuillez sélectionner une couleur");
         return
-    }
+    };
     colorInput = colorInput.value;
-    // créer array du produit avec son ID, qte, couleur, img, nom, prix
+    // Créer array du produit avec son ID, qte, couleur, img, nom, prix
     const productJson = {
         id : productId,
         quantity : quantityInput, 
