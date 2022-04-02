@@ -41,7 +41,7 @@ const button = document.querySelector("#addToCart");
 button.addEventListener("click", addToLocalStorage);
 
 //Créer une fonction callback pr envoyer array au local storage 
-function addToLocalStorage(){ 
+function addToLocalStorage() { 
     //Quantité
     let quantityInput = document.querySelector("#quantity"); 
     if(quantityInput) {
@@ -63,7 +63,7 @@ function addToLocalStorage(){
         image : product.imageUrl,
         name: product.name,
         price : product.price,
-        alt : product.altTxt 
+        alt : product.altTxt, 
     };
     //Convertir en Json pour garder l'array dans le localstorage 
     let existingEntries = JSON.parse(localStorage.getItem("allEntries"));
