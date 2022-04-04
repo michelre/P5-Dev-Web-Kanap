@@ -36,14 +36,46 @@ function loadCartDOM(products) {
     }
 }
 
+/*Supprimer un item du panier et du local storage*/
+
+//Créer un évenement sur le bouton Supprimer
+const removeCartItemButton = document.querySelectorAll(".deleteItem");
+console.log(removeCartItemButton);
+for(let i = 0; i < removeCartItemButton.length; i++) {
+  let removeButton = removeCartItemButton[i]
+  removeButton.addEventListener("click", deleteCartItem =>{console.log('clicked')})
+  ;
+};
+
+
+
 function deleteCartItem() {
     /**
      - Supprimer l'article du localStorage
      - Supprimer l'article du DOM
      - Recalculer le total
      */
-    const cartItems = document.querySelector("#cart__items");
-    cartItems.delete();
+   
+     //Chercher le produit à supprimer dans le local storage
+
+     
+   
+   
+   
+   
+    /* let products = localStorage.removeItem("all entries");
+    
+    for (let i = 0; i < localStorage.lenght; i++) {
+      let itemDeleted = localStorage[i]
+    }
+    if (products) {
+      products = JSON.parse(products)
+   }
+    let buttonClicked = event.target;
+    buttonClicked.document.querySelector("#cart__items").remove();*/
+    
+    calculateTotal();
+    
 }
 
 function setQuantity(){
@@ -51,6 +83,7 @@ function setQuantity(){
      - Mettre à jour la quantité du produit dans le localStorage
      - Recalculer le total
      */
+     calculateTotal();  
 }
 
 function calculateTotal(){
@@ -59,13 +92,10 @@ function calculateTotal(){
      */
 }
 
-/* Activer le boutton Supprimer*///ne marche pas
 
-const removeCartItemButton = document.querySelector(".deleteItem");
-if (removeCartItemButton) {
-    removeCartItemButton.addEventListener("click", deleteCartItem);
 
-}
+
+
 
 
 /**
