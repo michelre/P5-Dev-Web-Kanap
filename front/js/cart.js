@@ -43,20 +43,29 @@ const removeCartItemButton = document.querySelectorAll(".deleteItem");
 console.log(removeCartItemButton);
 for(let i = 0; i < removeCartItemButton.length; i++) {
   let removeButton = removeCartItemButton[i]
-  removeButton.addEventListener("click", deleteCartItem =>{console.log('clicked')})
+  removeButton.addEventListener("click", () => {
+    // Supprimer le produit du DOM
+    removeButton.closest("article").style.display = "none";
+    console.log('clicked')})
   ;
 };
 
-
-
-function deleteCartItem() {
+//Créer la fonction Supprimer
+function deleteCartItem(event) {
     /**
      - Supprimer l'article du localStorage
      - Supprimer l'article du DOM
      - Recalculer le total
      */
-   
+/*let buttonClicked = event.target;
+buttonClicked.closest("article").remove();
+console.log(buttonClicked);*/
+
      //Chercher le produit à supprimer dans le local storage
+
+     //Supprimer le produit du local storage
+     //Supprimer le produit du DOM
+     //Mettre le total du panier à jour
 
      
    
@@ -93,14 +102,3 @@ function calculateTotal(){
 }
 
 
-
-
-
-
-
-/**
- * TODO:
- * Permettre la modification des quantités
- * Permettre la suppression d'un produit
- * Afficher le prix total du panier
- */
