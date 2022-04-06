@@ -45,28 +45,24 @@ const removeCartItemButton = document.querySelectorAll(".deleteItem");
     let removeButton = removeCartItemButton[i];
     removeButton.addEventListener("click", deleteCartItem)}; 
 //Créer la fonction Supprimer
-function deleteCartItem (event) {
-  let removeButton = event.target;
-  //Supprimer le produit du DOM
-  removeButton.closest("article").style.display = "none";}
+function deleteCartItem (event) { 
   //Chercher le produit à supprimer dans le local storage
-  //let products = JSON.parse(localStorage.getItem("allEntries"));
-  let productId = document.querySelector(".cart__item").dataset.id;
-  let productColor = document.querySelector(".cart__item").dataset.color;
-    for (let i = 0; i < products.length; i++) {
-    const product = products[i];
-    if (productId === product.id && productColor === product.color) {
+  const productId = document.querySelector(".cart__item").dataset.id;
+  const productColor = document.querySelector(".cart__item").dataset.color;
+  const newBasket = JSON.parse(localStorage.getItem("allEntries"));
+  newBasket.find (
+    (products) => products.id === productId && products.color === productColor);
   //Supprimer le produit du local storage
-      const num = [i];
-      let newBasket = JSON.parse(localStorage.getItem("allEntries"));
-      newBasket.splice(num, 0);
+      const num = [0];      
+      newBasket.splice(num, 1);
   //Mettre à jour le localstorage
-      localStorage.allEntries = JSON.stringify(newBasket);
-    }
-    
+      localStorage.removeItem("allEntries");
+      localStorage.setItem("allEntries", JSON.stringify(newBasket));
+  //Supprimer le produit du DOM
+  const removeButton = event.target;
+  removeButton.closest("article").style.display = "none";
   //Mettre à jour le total du panier
   calculateTotal();
-  
   }
 
 /*---Modifier les quantités du panier et du local storage---*/
@@ -77,12 +73,12 @@ const quantityInput = document.querySelectorAll(".itemQuantity");
     let newQuantity = quantityInput[i];
     newQuantity.addEventListener("change", setQuantity);}
 //Créer la fonction pour mettre à jour la quantité
-function setQuantity(e){
-  const newQuantity = e.target.value;
+function setQuantity(event){
+  const newQuantity = event.target.value;
 //Condition pour seulement prendre en compte les quantités entre 1 et 100
-  if(e.target.value > 0 && e.target.value <101){
+  if(event.target.value > 0 && event.target.value <101){
     //Récuperer l'id et la couleur du produit actuel
-    const article = e.target.closest(".cart__item");
+    const article = event.target.closest(".cart__item");
     const articleId = article.dataset.id;
     const articleColor = article.dataset.color;
     //Chercher dans local storage le produit à quantité modifiée
