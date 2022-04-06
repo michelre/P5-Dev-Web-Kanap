@@ -37,22 +37,20 @@ function loadCartDOM(products) {
     }
 }
 
-/*Supprimer un item du panier et du local storage*/
+/*---Supprimer un item du panier et du local storage---*/
 
-//Créer un évenement sur le bouton Supprimer
+//Créer un évenement sur le bouton 
 const removeCartItemButton = document.querySelectorAll(".deleteItem");
-    console.log(removeCartItemButton);
   for(let i = 0; i < removeCartItemButton.length; i++) {
-    let removeButton = removeCartItemButton[i]
-    removeButton.addEventListener("click", deleteCartItem); 
+    let removeButton = removeCartItemButton[i];
+    removeButton.addEventListener("click", deleteCartItem)}; 
 //Créer la fonction Supprimer
 function deleteCartItem (event) {
   let removeButton = event.target;
   //Supprimer le produit du DOM
-  removeButton.closest("article").style.display = "none";
-  console.log('clicked')};
+  removeButton.closest("article").style.display = "none";}
   //Chercher le produit à supprimer dans le local storage
-  let products = JSON.parse(localStorage.getItem("allEntries"));
+  //let products = JSON.parse(localStorage.getItem("allEntries"));
   let productId = document.querySelector(".cart__item").dataset.id;
   let productColor = document.querySelector(".cart__item").dataset.color;
     for (let i = 0; i < products.length; i++) {
@@ -61,27 +59,47 @@ function deleteCartItem (event) {
   //Supprimer le produit du local storage
       const num = [i];
       let newBasket = JSON.parse(localStorage.getItem("allEntries"));
-      //newBasket.splice(num, 0);
+      newBasket.splice(num, 0);
   //Mettre à jour le localstorage
       localStorage.allEntries = JSON.stringify(newBasket);
     }
-  } 
-   /*console.log(product.id);
-    console.log(product.color);
-    console.log(productId);
-    console.log(productColor);*/
-     
+    
   //Mettre à jour le total du panier
   calculateTotal();
+  
   }
 
-function setQuantity(){
-    /**
-     - Mettre à jour la quantité du produit dans le localStorage
-     - Recalculer le total
-     */
-     calculateTotal();  
+/*---Modifier les quantités du panier et du local storage---*/
+
+//Créer un évenement sur la quantité
+const quantityInput = document.querySelectorAll(".itemQuantity");
+  for(let i = 0; i < quantityInput.length; i++){
+    let newQuantity = quantityInput[i];
+    newQuantity.addEventListener("change", setQuantity);}
+//Créer la fonction pour mettre à jour la quantité
+function setQuantity(e){
+  const newQuantity = e.target.value;
+//Condition pour seulement prendre en compte les quantités entre 1 et 100
+  if(e.target.value > 0 && e.target.value <101){
+    //Récuperer l'id et la couleur du produit actuel
+    const article = e.target.closest(".cart__item");
+    const articleId = article.dataset.id;
+    const articleColor = article.dataset.color;
+    //Chercher dans local storage le produit à quantité modifiée
+    const newBasket = JSON.parse(localStorage.getItem("allEntries"));
+    const look = newBasket.find (
+      (products) => products.id === articleId && products.color === articleColor);
+    //Remplacer la quantité dans le local storage
+    let newQuantityValue = {quantity : newQuantity};
+    Object.assign (look, newQuantityValue);
+    localStorage.removeItem("allEntries");
+    localStorage.setItem("allEntries", JSON.stringify(newBasket));
+  }
+//Recalculer le panier *******Ne se déclenche pas******
+calculateTotal();
 }
+
+/*---Calculer la quantité totale et le prix total des articles du panier---*/
 
 function calculateTotal(){
 //Définir les variables des totaux quantité et prix pour le panier  
@@ -89,10 +107,10 @@ function calculateTotal(){
   let totalQuantity = 0;
 //Faire une boucle pour récupérer toutes les quantités et prix dans le localstorage puis calculer les totaux 
   for (let i = 0; i < products.length; i++) {
-    let quantity = products[i].quantity;
-    let price = products[i].price;
-    totalQuantity += quantity;
-    totalBasket += quantity * price;
+    let quantity = products[i].quantity; 
+    let price = products[i].price; 
+    totalQuantity += parseInt(quantity); 
+    totalBasket += quantity * price; 
   }
 //Insérer les totaux dans le DOM
   document.querySelector("#totalPrice").innerHTML = totalBasket;
