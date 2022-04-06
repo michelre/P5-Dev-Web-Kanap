@@ -12,26 +12,25 @@ let product = null;
 
 //Récuperer les données du produit sur le localhost grace à l'id
 fetch(`http://localhost:3000/api/products/${productId}`)
-    .then(function (res) {
+    .then(function(res) {
         return res.json();
     })
     .then(res => {
         product = new Product(res)
         loadProductDOM(product)
     })
-
 //Remplir le HTML avec les données récupérées
-function loadProductDOM(product) {
+function loadProductDOM(product){
     document.querySelector('.item__content__description').innerHTML += product.description
-    document.querySelector(".item__img").innerHTML +=
+    document.querySelector(".item__img").innerHTML += 
         `<div class="item__img">
             <img src="${product.imageUrl}" alt="${product.altTxt}">
         </div>`
     document.querySelector("#title").innerHTML += product.name
     document.querySelector("#price").innerHTML += product.price
-    for (let colors of product.colors) {
-        document.querySelector("#colors").innerHTML +=
-            `<option value="${colors}">${colors}</option>`
+    for(let colors of product.colors){
+        document.querySelector("#colors").innerHTML += 
+        `<option value="${colors}">${colors}</option>`
     }
 }
 
@@ -41,47 +40,56 @@ function loadProductDOM(product) {
 const button = document.querySelector("#addToCart");
 button.addEventListener("click", addToLocalStorage);
 
-//Créer une fonction callback pr envoyer array au local storage
-function addToLocalStorage() {
-    // créer array du produit avec son ID, qte et couleur
-    let quantityInput = document.querySelector("#quantity"); // Créer un message erreur si quantité=0 et sup à 100
-    if (quantityInput) {
+//Créer une fonction callback pr envoyer array au local storage 
+function addToLocalStorage() { 
+    //Quantité
+    let quantityInput = document.querySelector("#quantity"); 
+    if(quantityInput) {
         quantityInput = parseInt(quantityInput.value);
-    }
-    //if(quantityInput < 1 && quantityInput >100) {alert("Merci d'entrer une quantité comprise entre 1 et 100")};
-    let colorInput = document.querySelector("#colors"); //Créer un message erreur si couleur non selectionnée
-    if (colorInput.value === '') {
+    };
+    // Créer un message erreur si quantité=0 et sup à 100?
+    if(quantityInput < 1 || quantityInput > 100){ 
+        alert("Veuillez entrer une quantité comprise entre 1 et 100");
+        return
+    };
+    //Couleur
+    let colorInput = document.querySelector("#colors"); 
+    //Créer un message erreur si couleur non selectionnée
+    if(colorInput.value === '') { 
         alert("Veuillez sélectionner une couleur");
         return
-    }
-    colorInput = colorInput.value;
-    const productJson = {
-        id: productId,
-        image: product.imageUrl,
-        name: product.name,
-        price: product.price,
-        quantity: quantityInput, //ne marche pas
-        color: colorInput,  //ne marche pas
     };
-    //Pouvoir ajouter plusieurs produits dans le localstorage **ne marche pas**
+    colorInput = colorInput.value;
+    // Créer array du produit avec son ID, qte, couleur, img, nom, prix
+    const productJson = {
+        id : productId,
+        quantity : quantityInput, 
+        color: colorInput, 
+        image : product.imageUrl,
+        name: product.name,
+        price : product.price,
+        alt : product.altTxt, 
+    };
+    //Convertir en Json pour garder l'array dans le localstorage 
     let existingEntries = JSON.parse(localStorage.getItem("allEntries"));
+    //Vérifier que le produit n'est pas déjà ds le local storage avt de l'ajouter
     if (existingEntries == null) {
-        existingEntries = [];
-    }
+            existingEntries = [];
+        }
     let exists = false;
-    for(let i = 0; i < existingEntries.length; i++){
-        if(existingEntries[i].id === productId && existingEntries[i].color === colorInput){
+    for(let i = 0; i < existingEntries.length; i++) {
+        if(existingEntries[i].id === productId && existingEntries[i].color === colorInput) {
             existingEntries[i].quantity += quantityInput
             exists = true
         }
-    }
-    if(!exists){
+    }    
+    // Pouvoir ajouter plusieurs produits dans le localstorage 
+    if(!exists) {
         existingEntries.push(productJson);
-    }
-
-    localStorage.setItem("allEntries", JSON.stringify(existingEntries));
+    }    
+    localStorage.setItem("allEntries", JSON.stringify(existingEntries)); 
     // Créer un message d'alerte pr confimer que le produit a été ajouté au panier
-    alert("Votre produit a bien été ajouté au panier");
+    alert("Votre produit a bien été ajouté au panier");      
 };
 
 
