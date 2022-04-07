@@ -22,14 +22,14 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 //Remplir le HTML avec les données récupérées
 function loadProductDOM(product){
     document.querySelector('.item__content__description').innerHTML += product.description
-    document.querySelector(".item__img").innerHTML += 
+    document.querySelector(".item__img").innerHTML +=
         `<div class="item__img">
             <img src="${product.imageUrl}" alt="${product.altTxt}">
         </div>`
     document.querySelector("#title").innerHTML += product.name
     document.querySelector("#price").innerHTML += product.price
     for(let colors of product.colors){
-        document.querySelector("#colors").innerHTML += 
+        document.querySelector("#colors").innerHTML +=
         `<option value="${colors}">${colors}</option>`
     }
 }
@@ -40,22 +40,22 @@ function loadProductDOM(product){
 const button = document.querySelector("#addToCart");
 button.addEventListener("click", addToLocalStorage);
 
-//Créer une fonction callback pr envoyer array au local storage 
-function addToLocalStorage() { 
+//Créer une fonction callback pr envoyer array au local storage
+function addToLocalStorage() {
     //Quantité
-    let quantityInput = document.querySelector("#quantity"); 
+    let quantityInput = document.querySelector("#quantity");
     if(quantityInput) {
         quantityInput = parseInt(quantityInput.value);
     };
     // Créer un message erreur si quantité=0 et sup à 100?
-    if(quantityInput < 1 || quantityInput > 100){ 
+    if(quantityInput < 1 || quantityInput > 100){
         alert("Veuillez entrer une quantité comprise entre 1 et 100");
         return
     };
     //Couleur
-    let colorInput = document.querySelector("#colors"); 
+    let colorInput = document.querySelector("#colors");
     //Créer un message erreur si couleur non selectionnée
-    if(colorInput.value === '') { 
+    if(colorInput.value === '') {
         alert("Veuillez sélectionner une couleur");
         return
     };
@@ -63,14 +63,14 @@ function addToLocalStorage() {
     // Créer array du produit avec son ID, qte, couleur, img, nom, prix
     const productJson = {
         id : productId,
-        quantity : quantityInput, 
-        color: colorInput, 
+        quantity : quantityInput,
+        color: colorInput,
         image : product.imageUrl,
         name: product.name,
-        price : product.price,
-        alt : product.altTxt, 
+        //price : product.price,
+        alt : product.altTxt,
     };
-    //Convertir en Json pour garder l'array dans le localstorage 
+    //Convertir en Json pour garder l'array dans le localstorage
     let existingEntries = JSON.parse(localStorage.getItem("allEntries"));
     //Vérifier que le produit n'est pas déjà ds le local storage avt de l'ajouter
     if (existingEntries == null) {
@@ -82,14 +82,14 @@ function addToLocalStorage() {
             existingEntries[i].quantity += quantityInput
             exists = true
         }
-    }    
-    // Pouvoir ajouter plusieurs produits dans le localstorage 
+    }
+    // Pouvoir ajouter plusieurs produits dans le localstorage
     if(!exists) {
         existingEntries.push(productJson);
-    }    
-    localStorage.setItem("allEntries", JSON.stringify(existingEntries)); 
+    }
+    localStorage.setItem("allEntries", JSON.stringify(existingEntries));
     // Créer un message d'alerte pr confimer que le produit a été ajouté au panier
-    alert("Votre produit a bien été ajouté au panier");      
+    alert("Votre produit a bien été ajouté au panier");
 };
 
 
