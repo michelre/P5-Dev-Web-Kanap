@@ -1,5 +1,6 @@
 //*---Script page cart.html---*//
 
+
 //Récuperer les données du local storage
 let products = localStorage.getItem("allEntries");
 if (products) {
@@ -61,10 +62,12 @@ function deleteCartItem (event) {
   //Supprimer le produit du DOM
   const removeButton = event.target;
   removeButton.closest("article").style.display = "none";
-  //Mettre à jour le total du panier
+  alert("Vous êtes sur le point de supprimer cet article de votre panier. Voulez-vous continuer ?");
+  //Mettre à jour le total du panier *******Ne se déclenche pas******
   calculateTotal();
-  }
-
+  location.reload();
+} calculateTotal();
+  
 /*---Modifier les quantités du panier et du local storage---*/
 
 //Créer un évenement sur la quantité
@@ -93,7 +96,9 @@ function setQuantity(event){
   }
 //Recalculer le panier *******Ne se déclenche pas******
 calculateTotal();
-}
+location.reload();
+} calculateTotal();
+
 
 /*---Calculer la quantité totale et le prix total des articles du panier---*/
 
