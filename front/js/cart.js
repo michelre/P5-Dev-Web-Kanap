@@ -1,5 +1,6 @@
 //*---Script page cart.html---*//
 
+/*---------------------------Affichage Panier-------------------*/
 
 //Récuperer les données du local storage
 let products = localStorage.getItem("allEntries");
@@ -38,7 +39,9 @@ function loadCartDOM(products) {
     }
 }
 
-/*---Supprimer un item du panier et du local storage---*/
+/*---------------------------Modification Panier-------------------*/
+
+/*Supprimer un item du panier et du local storage*/
 
 //Créer un évenement sur le bouton 
 const removeCartItemButton = document.querySelectorAll(".deleteItem");
@@ -68,7 +71,7 @@ function deleteCartItem (event) {
   location.reload();
 } calculateTotal();
   
-/*---Modifier les quantités du panier et du local storage---*/
+/*Modifier les quantités du panier et du local storage*/
 
 //Créer un évenement sur la quantité
 const quantityInput = document.querySelectorAll(".itemQuantity");
@@ -100,7 +103,7 @@ location.reload();
 } calculateTotal();
 
 
-/*---Calculer la quantité totale et le prix total des articles du panier---*/
+/*Calculer la quantité totale et le prix total des articles du panier*/
 
 function calculateTotal(){
 //Définir les variables des totaux quantité et prix pour le panier  
@@ -118,3 +121,62 @@ function calculateTotal(){
   document.querySelector("#totalQuantity").innerHTML = totalQuantity;
 }
 
+/*---------------------------Formulaire Panier-------------------*/
+
+
+//Création d'un evenement sur le bouton de commande
+const orderButton = document.querySelector("#order");
+orderButton.addEventListener("click" , formValidity);
+
+//Fonction de verification de la validité des données du formulaire
+function formValidity(event) {
+  //Validation Prénom
+  const firstName = document.querySelector("#firstName");
+  const validFirstName = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?$/;
+    //Vérifier si le champ est vide
+    if (firstName.validity.valueMissing) {
+      event.preventDefault();
+      document.querySelector("#firstNameErrorMsg").textContent = "Veuillez entrer votre prénom";
+    }
+    //Vérifier si le champ est valide (Regex)
+    else if (validFirstName.test(firstName.value) == false) {
+      event.preventDefault();
+      document.querySelector("#firstNameErrorMsg").textContent = "Le format de votre prénom n'est pas correct";
+      firstName.style.color = "darkorange";
+    }
+  //Validation Nom
+  const lastName = document.querySelector("#lastName");
+    //Vérifier si le champ est vide
+    if (lastName.validity.valueMissing) {
+      event.preventDefault();
+      document.querySelector("#lastNameErrorMsg").textContent = "Veuillez entrer votre nom";
+    }
+    //Vérifier si le champ est valide (Regex)
+
+  //Validation Adresse
+  const address = document.querySelector("#address");
+    //Vérifier si le champ est vide
+    if (address.validity.valueMissing) {
+      event.preventDefault();
+      document.querySelector("#addressErrorMsg").textContent = "Veuillez entrer votre adresse";
+    }
+    //Vérifier si le champ est valide (Regex)
+ 
+  //Validation Ville
+  const city = document.querySelector("#city");
+    //Vérifier si le champ est vide
+    if (city.validity.valueMissing) {
+      event.preventDefault();
+      document.querySelector("#cityErrorMsg").textContent = "Veuillez entrer votre ville";
+    }
+    //Vérifier si le champ est valide (Regex)
+    
+  //Validation Email
+  const email = document.querySelector("#email");
+    //Vérifier si le champ est vide
+    if (email.validity.valueMissing) {
+      event.preventDefault();
+      document.querySelector("#emailErrorMsg").textContent = "Veuillez entrer votre email";
+    }
+    //Vérifier si le champ est valide (Regex)  
+  }
