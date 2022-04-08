@@ -51,6 +51,7 @@ function loadCartDOM(products) {
 /*---------------------------Modification Panier-------------------*/
 
 /*Créer des evenements sur le bouton supprimer et le champ de la quantité*/
+
 function initEvents (products){
 //Créer un évenement sur le bouton supprimer
 const removeCartItemButton = document.querySelectorAll(".deleteItem");
@@ -107,7 +108,6 @@ function setQuantity(event, products){
   }
 }  
 
-
 /*Calculer la quantité totale et le prix total des articles du panier*/
 
 function calculateTotal(products){
@@ -129,59 +129,130 @@ function calculateTotal(products){
 /*---------------------------Formulaire Panier-------------------*/
 
 
-//Création d'un evenement sur le bouton de commande
-const orderButton = document.querySelector("#order");
-orderButton.addEventListener("click" , formValidity);
+//Création d'un evenement sur le formulaire de commande
+
+const form = document.querySelector(".cart__order__form");
+form.addEventListener("submit" , (event) => {
+  event.preventDefault()
+  resetFields (event)
+  if (formValidity (event)) {
+    sendOrder()
+  }
+});  
+
+//Fonction pour réinitialiser les champs du formulaire après une mauvaise entrée ou une entrée nulle
+
+function resetFields (event) {
+  const firstName = event.target.firstName;
+  document.querySelector("#firstNameErrorMsg").textContent = "";
+  firstName.style.color = "black";
+  const lastName = event.target.lastName;
+  document.querySelector("#lastNameErrorMsg").textContent = "";
+  lastName.style.color = "black";
+  const address = event.target.address;
+  document.querySelector("#addressErrorMsg").textContent = "";
+  address.style.color = "black";
+  const city = event.target.city;
+  document.querySelector('#cityErrorMsg').textContent = "";
+  city.style.color = "black";
+  const email = event.target.email;
+  document.querySelector("#emailErrorMsg").textContent = "";
+  email.style.color = "black";
+}
+  
 
 //Fonction de verification de la validité des données du formulaire
+
 function formValidity(event) {
+  let formValid = true;
   //Validation Prénom
-  const firstName = document.querySelector("#firstName");
-  const validFirstName = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?$/;
+  const firstName = event.target.firstName;
+  const validFirstName = /^([a-zA-ZàâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ]{2,})+([-'\s][a-zA-ZàâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ]+)?$/;
     //Vérifier si le champ est vide
     if (firstName.validity.valueMissing) {
       event.preventDefault();
       document.querySelector("#firstNameErrorMsg").textContent = "Veuillez entrer votre prénom";
+      formValid = false;
     }
     //Vérifier si le champ est valide (Regex)
     else if (validFirstName.test(firstName.value) == false) {
       event.preventDefault();
       document.querySelector("#firstNameErrorMsg").textContent = "Le format de votre prénom n'est pas correct";
       firstName.style.color = "darkorange";
+      formValid = false;
     }
   //Validation Nom
-  const lastName = document.querySelector("#lastName");
+  const lastName = event.target.lastName;
+  const validLastName = /^([a-zA-ZàâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ]{2,})+([-'\s][a-zA-ZàâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ]+)?$/;
     //Vérifier si le champ est vide
     if (lastName.validity.valueMissing) {
       event.preventDefault();
       document.querySelector("#lastNameErrorMsg").textContent = "Veuillez entrer votre nom";
+      formValid = false;
     }
     //Vérifier si le champ est valide (Regex)
+    else if (validLastName.test(lastName.value) == false){
+      event.preventDefault();
+      document.querySelector("#lastNameErrorMsg").textContent = "Le format de votre nom n'est pas correct";
+      lastName.style.color = "darkorange";
+      formValid = false;
+    }
 
   //Validation Adresse
   const address = document.querySelector("#address");
+  const validAddress = /^[a-zA-Z0-9àâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ\s,.'-]{5,}$/;
     //Vérifier si le champ est vide
     if (address.validity.valueMissing) {
       event.preventDefault();
       document.querySelector("#addressErrorMsg").textContent = "Veuillez entrer votre adresse";
+      formValid = false;
     }
     //Vérifier si le champ est valide (Regex)
+    else if (validAddress.test(address.value) == false){
+      event.preventDefault();
+      document.querySelector("#addressErrorMsg").textContent = "Le format de votre adresse n'est pas correct";
+      address.style.color = "darkorange";
+      formValid = false;
+    }
  
   //Validation Ville
   const city = document.querySelector("#city");
+  const validCity = /^([a-zA-ZàâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ]{2,})+([-'\s][a-zA-ZàâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ]+[-'\s][a-zA-ZàâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ]+)?$/;
     //Vérifier si le champ est vide
     if (city.validity.valueMissing) {
       event.preventDefault();
       document.querySelector("#cityErrorMsg").textContent = "Veuillez entrer votre ville";
+      formValid = false;
     }
     //Vérifier si le champ est valide (Regex)
+    else if (validCity.test(city.value) == false) {
+      event.preventDefault();
+      document.querySelector("#cityErrorMsg").textContent = "Le format de votre ville n'est pas correct";
+      city.style.color = "darkorange";
+      formValid = false;
+    }
     
   //Validation Email
   const email = document.querySelector("#email");
+  const validEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,5})$/;
     //Vérifier si le champ est vide
     if (email.validity.valueMissing) {
       event.preventDefault();
       document.querySelector("#emailErrorMsg").textContent = "Veuillez entrer votre email";
+      formValid = false;
     }
-    //Vérifier si le champ est valide (Regex)  
-  }
+    //Vérifier si le champ est valide (Regex)
+    else if (validEmail.test(email.value) == false) {
+      event.preventDefault();
+      document.querySelector("#emailErrorMsg").textContent = "Le format de votre email n'est pas correct";
+      email.style.color = "darkorange";
+      formValid = false;
+    }
+  return formValid;
+}
+
+//Fonction pour envoyer la commande
+
+function sendOrder(){
+  //fetch de type post
+}
