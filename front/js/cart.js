@@ -6,10 +6,19 @@
 let products = localStorage.getItem("allEntries");
 if (products) {
     products = JSON.parse(products)
-   
+   // Gestion asynchrone du chargement des produits et donc du DOM et des évènements
+   products = products.map((p) => fetch(`http://localhost:3000/api/products/${p.id}`)
+   .then(r => r.json())
+   .then((productDetail) => ({...p, price: productDetail.price}))
+)
+Promise.all(products).then(p => {
+   loadCartDOM(p);
+   initEvents(p);
+   calculateTotal(p)
+})
 }
+
 //Insérer un produit et ses détails ajouté au panier
-loadCartDOM(products);
 
 function loadCartDOM(products) {
     for (let i = 0; i < products.length; i++) {
@@ -41,45 +50,42 @@ function loadCartDOM(products) {
 
 /*---------------------------Modification Panier-------------------*/
 
-/*Supprimer un item du panier et du local storage*/
-
-//Créer un évenement sur le bouton 
+/*Créer des evenements sur le bouton supprimer et le champ de la quantité*/
+function initEvents (products){
+//Créer un évenement sur le bouton supprimer
 const removeCartItemButton = document.querySelectorAll(".deleteItem");
   for(let i = 0; i < removeCartItemButton.length; i++) {
     let removeButton = removeCartItemButton[i];
-    removeButton.addEventListener("click", deleteCartItem)}; 
-//Créer la fonction Supprimer
-function deleteCartItem (event) { 
-  //Chercher le produit à supprimer dans le local storage
-  const productId = document.querySelector(".cart__item").dataset.id;
-  const productColor = document.querySelector(".cart__item").dataset.color;
-  const newBasket = JSON.parse(localStorage.getItem("allEntries"));
-  newBasket.find (
-    (products) => products.id === productId && products.color === productColor);
-  //Supprimer le produit du local storage
-      const num = [0];      
-      newBasket.splice(num, 1);
-  //Mettre à jour le localstorage
-      localStorage.removeItem("allEntries");
-      localStorage.setItem("allEntries", JSON.stringify(newBasket));
-  //Supprimer le produit du DOM
-  const removeButton = event.target;
-  removeButton.closest("article").style.display = "none";
-  alert("Vous êtes sur le point de supprimer cet article de votre panier. Voulez-vous continuer ?");
-  //Mettre à jour le total du panier *******Ne se déclenche pas******
-  calculateTotal();
-  location.reload();
-} calculateTotal();
-  
-/*Modifier les quantités du panier et du local storage*/
-
+    removeButton.addEventListener("click", (event) => deleteCartItem(event, products));
+  }
 //Créer un évenement sur la quantité
 const quantityInput = document.querySelectorAll(".itemQuantity");
   for(let i = 0; i < quantityInput.length; i++){
     let newQuantity = quantityInput[i];
-    newQuantity.addEventListener("change", setQuantity);}
-//Créer la fonction pour mettre à jour la quantité
-function setQuantity(event){
+    newQuantity.addEventListener("change", (event) => setQuantity(event, products))
+  }
+}
+
+/*Supprimer un item du panier et du local storage*/
+
+function deleteCartItem (event, products) { 
+  //Chercher le produit à supprimer dans le local storage
+  const productId = event.target.closest("article").dataset.id;
+  const productColor = event.target.closest("article").dataset.color;
+  //Supprimer le produit du local storage
+  const newBasket = products.filter((product) => !(product.id === productId && product.color === productColor));
+  //Mettre à jour le localstorage
+  localStorage.setItem("allEntries", JSON.stringify(newBasket));      
+  //Supprimer le produit du DOM
+  event.target.closest("article").remove();
+  alert("Vous êtes sur le point de supprimer cet article de votre panier. Voulez-vous continuer ?");
+  //Mettre à jour le total du panier
+  calculateTotal(newBasket); 
+} 
+  
+/*Modifier les quantités du panier et du local storage*/
+
+function setQuantity(event, products){
   const newQuantity = event.target.value;
 //Condition pour seulement prendre en compte les quantités entre 1 et 100
   if(event.target.value > 0 && event.target.value <101){
@@ -88,24 +94,23 @@ function setQuantity(event){
     const articleId = article.dataset.id;
     const articleColor = article.dataset.color;
     //Chercher dans local storage le produit à quantité modifiée
-    const newBasket = JSON.parse(localStorage.getItem("allEntries"));
-    const look = newBasket.find (
-      (products) => products.id === articleId && products.color === articleColor);
+    const look = products.find (
+      (product) => product.id === articleId && product.color === articleColor);
     //Remplacer la quantité dans le local storage
     let newQuantityValue = {quantity : newQuantity};
     Object.assign (look, newQuantityValue);
-    localStorage.removeItem("allEntries");
-    localStorage.setItem("allEntries", JSON.stringify(newBasket));
+    localStorage.setItem("allEntries", JSON.stringify(products));
+    //Recalculer le panier 
+    calculateTotal(products);
+  } else {
+    alert("Veuillez entrer une quantité comprise entre 1 et 100");
   }
-//Recalculer le panier *******Ne se déclenche pas******
-calculateTotal();
-location.reload();
-} calculateTotal();
+}  
 
 
 /*Calculer la quantité totale et le prix total des articles du panier*/
 
-function calculateTotal(){
+function calculateTotal(products){
 //Définir les variables des totaux quantité et prix pour le panier  
   let totalBasket = 0;
   let totalQuantity = 0;

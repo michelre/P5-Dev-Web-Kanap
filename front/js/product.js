@@ -67,7 +67,6 @@ function addToLocalStorage() {
         color: colorInput, 
         image : product.imageUrl,
         name: product.name,
-        price : product.price,
         alt : product.altTxt, 
     };
     //Convertir en Json pour garder l'array dans le localstorage 
