@@ -136,7 +136,7 @@ form.addEventListener("submit" , (event) => {
   event.preventDefault()
   resetFields (event)
   if (formValidity (event)) {
-    sendOrder()
+    sendOrder(event)
   }
 });  
 
@@ -253,6 +253,53 @@ function formValidity(event) {
 
 //Fonction pour envoyer la commande
 
-function sendOrder(){
-  //fetch de type post
+function sendOrder(event){
+  //Créer un objet contact
+  contact = {
+    firstName : document.querySelector("#firstName").value,
+    lastName : document.querySelector("#lastName").value,
+    address : document.querySelector("#address").value,
+    city: document.querySelector("#city").value,
+    email : document.querySelector("#email").value,
+  }; console.log(contact);
+  //Créer un tableau de produit avec les ID du panier
+  let basket = JSON.parse(localStorage.getItem("allEntries"));
+  let products = [];
+  if (basket == null) {
+    event.preventDefault();
+    alert("Votre panier est vide, veuillez y ajouter un produit avant de passer commande.");
+  } else {
+    for (let item of basket){
+      products.push(item.id);       
+      }; 
+      console.log(basket);
+      console.log(products);
+  };
+  //Récuperer les données saisies à envoyer au serveur
+  const order = {
+    contact,
+    products,
+  };
+  //Créer la requête Fetch de type POST
+  const promise = fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+      'Accept': 'application/json', 
+      'Content-Type': 'application/json' 
+    },
+    body: JSON.stringify(order),
+  });
+  //Pour voir le résultat du serveur, vider le panier et aller la page de confirmation
+  promise.then(async(response) =>{
+    try{
+      console.log(response);
+      const content = await response.json();
+      console.log(content);
+      localStorage.clear();
+      location.href = `./confirmation.html?orderId=${response.orderId}`;
+    }catch(error){
+      console.log(error);
+    }
+  })
+return
 }
