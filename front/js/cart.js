@@ -214,7 +214,6 @@ function formValidity(event) {
       address.style.color = "darkorange";
       formValid = false;
     }
- 
   //Validation Ville
   const city = document.querySelector("#city");
   const validCity = /^([a-zA-ZàâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ]{2,})+([-'\s][a-zA-ZàâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ]+[-'\s][a-zA-ZàâäéèëêîïôöùûüçæœÂÀÄÉÈÊËÎÏÔÖÛÜÙÇÆŒ]+)?$/;
@@ -231,7 +230,6 @@ function formValidity(event) {
       city.style.color = "darkorange";
       formValid = false;
     }
-    
   //Validation Email
   const email = document.querySelector("#email");
   const validEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,5})$/;
@@ -267,11 +265,12 @@ function sendOrder(event){
   let products = [];
   if (basket === null) {
     event.preventDefault(); //ne marche pas, la requete est envoyee avec panier vide
+    event.stopPropagation();
     alert("Votre panier est vide, veuillez y ajouter un produit avant de passer commande.");
   } else {
     for (let item of basket){
       products.push(item.id);       
-      }; 
+      };
   };
   //Récuperer les données saisies à envoyer au serveur
   const order = {
@@ -297,5 +296,4 @@ function sendOrder(event){
       alert("Une erreur est survenue, veuillez recommencer ultérieurement.");
     }
   })
-return
 }
