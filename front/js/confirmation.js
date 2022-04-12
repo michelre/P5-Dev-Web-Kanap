@@ -5,7 +5,5 @@ const url = new URL(window.location.href);
 const params = new URLSearchParams(url.search);
 const orderId = params.get('orderId');
 
-console.log(orderId);
-
 //Insérer le numéro de commande dans le DOM
 document.querySelector("#orderId").innerText = orderId;

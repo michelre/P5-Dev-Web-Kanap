@@ -261,19 +261,17 @@ function sendOrder(event){
     address : document.querySelector("#address").value,
     city: document.querySelector("#city").value,
     email : document.querySelector("#email").value,
-  }; console.log(contact);
+  }; 
   //Créer un tableau de produit avec les ID du panier
   let basket = JSON.parse(localStorage.getItem("allEntries"));
   let products = [];
-  if (basket == null) {
-    event.preventDefault();
+  if (basket === null) {
+    event.preventDefault(); //ne marche pas, la requete est envoyee avec panier vide
     alert("Votre panier est vide, veuillez y ajouter un produit avant de passer commande.");
   } else {
     for (let item of basket){
       products.push(item.id);       
       }; 
-      console.log(basket);
-      console.log(products);
   };
   //Récuperer les données saisies à envoyer au serveur
   const order = {
@@ -289,16 +287,14 @@ function sendOrder(event){
     },
     body: JSON.stringify(order),
   });
-  //Pour voir le résultat du serveur, vider le panier et aller la page de confirmation
+  //Pour voir le résultat du serveur, vider le panier et aller la page de confirmation en ayant recuperé le numéro de commande
   promise.then(async(response) =>{
     try{
-      console.log(response);
       const content = await response.json();
-      console.log(content);
       localStorage.clear();
-      location.href = `./confirmation.html?orderId=${response.orderId}`;
+      location.href = `./confirmation.html?orderId=${content.orderId}`;
     }catch(error){
-      console.log(error);
+      alert("Une erreur est survenue, veuillez recommencer ultérieurement.");
     }
   })
 return
