@@ -60,7 +60,7 @@ function addToLocalStorage() {
         return
     };
     colorInput = colorInput.value;
-    // Créer array du produit avec son ID, qte, couleur, img, nom, prix
+    // Créer array du produit avec son ID, qte, couleur, img, nom
     const productJson = {
         id : productId,
         quantity : quantityInput, 

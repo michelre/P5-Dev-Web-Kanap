@@ -132,11 +132,14 @@ function calculateTotal(products){
 //Création d'un evenement sur le formulaire de commande
 
 const form = document.querySelector(".cart__order__form");
+let basket = JSON.parse(localStorage.getItem("allEntries"));
 form.addEventListener("submit" , (event) => {
-  event.preventDefault()
-  resetFields (event)
-  if (formValidity (event)) {
+  event.preventDefault();
+  resetFields (event);
+  if (formValidity (event) && basket !== null) {
     sendOrder(event)
+  } else {
+    alert("Veuillez vérifier que le panier ne soit pas vide et que le formulaire soit bien complété avant de passer votre commande.");
   }
 });  
 
@@ -261,17 +264,10 @@ function sendOrder(event){
     email : document.querySelector("#email").value,
   }; 
   //Créer un tableau de produit avec les ID du panier
-  let basket = JSON.parse(localStorage.getItem("allEntries"));
   let products = [];
-  if (basket === null) {
-    event.preventDefault(); //ne marche pas, la requete est envoyee avec panier vide
-    event.stopPropagation();
-    alert("Votre panier est vide, veuillez y ajouter un produit avant de passer commande.");
-  } else {
     for (let item of basket){
       products.push(item.id);       
       };
-  };
   //Récuperer les données saisies à envoyer au serveur
   const order = {
     contact,
