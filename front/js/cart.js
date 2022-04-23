@@ -10,7 +10,7 @@ if (products) {
    products = products.map((p) => fetch(`http://localhost:3000/api/products/${p.id}`)
    .then(r => r.json())
    .then((productDetail) => ({...p, price: productDetail.price}))
-)
+) 
 Promise.all(products).then(p => {
    loadCartDOM(p);
    initEvents(p);
@@ -71,17 +71,20 @@ const quantityInput = document.querySelectorAll(".itemQuantity");
 
 function deleteCartItem (event, products) { 
   //Chercher le produit à supprimer dans le local storage
-  const productId = event.target.closest("article").dataset.id;
-  const productColor = event.target.closest("article").dataset.color;
-  //Supprimer le produit du local storage
-  const newBasket = products.filter((product) => !(product.id === productId && product.color === productColor));
+  const productId = event.target.closest("article").dataset.id; 
+  const productColor = event.target.closest("article").dataset.color; 
+  //Supprimer le produit du local storage 
+  const itemToDelete = products.findIndex(
+    (product) => (product.id === productId && product.color === productColor)); 
+  products.splice(itemToDelete, 1);
   //Mettre à jour le localstorage
-  localStorage.setItem("allEntries", JSON.stringify(newBasket));      
+  localStorage.removeItem("allEntries");
+  localStorage.setItem("allEntries", JSON.stringify(products)); 
   //Supprimer le produit du DOM
   event.target.closest("article").remove();
   alert("Vous êtes sur le point de supprimer cet article de votre panier. Voulez-vous continuer ?");
   //Mettre à jour le total du panier
-  calculateTotal(newBasket); 
+  calculateTotal(products);
 } 
   
 /*Modifier les quantités du panier et du local storage*/
@@ -102,7 +105,7 @@ function setQuantity(event, products){
     Object.assign (look, newQuantityValue);
     localStorage.setItem("allEntries", JSON.stringify(products));
     //Recalculer le panier 
-    calculateTotal(products);
+    calculateTotal(products); 
   } else {
     alert("Veuillez entrer une quantité comprise entre 1 et 100");
   }
@@ -110,12 +113,12 @@ function setQuantity(event, products){
 
 /*Calculer la quantité totale et le prix total des articles du panier*/
 
-function calculateTotal(products){
+function calculateTotal(products){ 
 //Définir les variables des totaux quantité et prix pour le panier  
-  let totalBasket = 0;
-  let totalQuantity = 0;
+  let totalBasket = 0; 
+  let totalQuantity = 0; 
 //Faire une boucle pour récupérer toutes les quantités et prix dans le localstorage puis calculer les totaux 
-  for (let i = 0; i < products.length; i++) {
+for (let i = 0; i < products.length; i++) {
     let quantity = products[i].quantity; 
     let price = products[i].price; 
     totalQuantity += parseInt(quantity); 

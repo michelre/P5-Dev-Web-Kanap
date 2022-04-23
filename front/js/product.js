@@ -60,7 +60,7 @@ function addToLocalStorage() {
         return
     };
     colorInput = colorInput.value;
-    // Créer array du produit avec son ID, qte, couleur, img, nom
+    // Créer array du produit avec son ID, qte, couleur, img, nom (pas ds prix ds le localstorage)
     const productJson = {
         id : productId,
         quantity : quantityInput, 
@@ -69,7 +69,7 @@ function addToLocalStorage() {
         name: product.name,
         alt : product.altTxt, 
     };
-    //Convertir en Json pour garder l'array dans le localstorage 
+    //Récuperer les entrées existantes dans le local storage et les convertir en JS pr lecture 
     let existingEntries = JSON.parse(localStorage.getItem("allEntries"));
     //Vérifier que le produit n'est pas déjà ds le local storage avt de l'ajouter
     if (existingEntries == null) {
@@ -85,7 +85,8 @@ function addToLocalStorage() {
     // Pouvoir ajouter plusieurs produits dans le localstorage 
     if(!exists) {
         existingEntries.push(productJson);
-    }    
+    }
+    //Convertir l'objet JS en chaine de caractere Json afin de le stocker ds le localstorage    
     localStorage.setItem("allEntries", JSON.stringify(existingEntries)); 
     // Créer un message d'alerte pr confimer que le produit a été ajouté au panier
     alert("Votre produit a bien été ajouté au panier");      
